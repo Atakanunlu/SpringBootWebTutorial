@@ -1,3 +1,9 @@
+# H2 Database Files
+*.mv.db
+*.trace.db
+db.mv.db
+db.trace.db
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
