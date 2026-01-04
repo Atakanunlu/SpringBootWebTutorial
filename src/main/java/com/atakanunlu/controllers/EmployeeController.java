@@ -3,6 +3,7 @@ package com.atakanunlu.controllers;
 import com.atakanunlu.dto.EmployeeDTO;
 import com.atakanunlu.entities.EmployeeEntity;
 import com.atakanunlu.repositories.EmployeeRepository;
+import com.atakanunlu.services.EmployeeService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,27 +18,27 @@ public class EmployeeController {
 //    public String superSecretMessage(){
 //        return "Ben atakan :)";
 //    }
+    private final EmployeeService employeeService;
 
-    private final EmployeeRepository employeeRepository;
-
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
+
     @GetMapping("/{employeeId}")
-    public EmployeeEntity getEmployeeById(@PathVariable(name = "employeeId") Long id){
-        return employeeRepository.findById(id).orElse(null);
+    public EmployeeDTO getEmployeeById(@PathVariable(name = "employeeId") Long id){
+        return employeeService.getEmployeeById(id);
     }
 
     @GetMapping
-    public List<EmployeeEntity> getAllEmployees(@RequestParam(required = false) Integer age,
+    public List<EmployeeDTO> getAllEmployees(@RequestParam(required = false) Integer age,
                                                 @RequestParam(required = false) String sortBy){
-        return employeeRepository.findAll();
+        return employeeService.getAllEmployees();
     }
 
     @PostMapping
-    public EmployeeEntity createNewEmployee(@RequestBody EmployeeEntity inputEmployee){
-        return employeeRepository.save(inputEmployee);
+    public EmployeeDTO createNewEmployee(@RequestBody EmployeeEntity inputEmployee){
+        return employeeService.createNewEmployee(inputEmployee);
     }
 
     @PutMapping
