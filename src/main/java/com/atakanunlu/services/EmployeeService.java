@@ -2,6 +2,7 @@ package com.atakanunlu.services;
 
 import com.atakanunlu.dto.EmployeeDTO;
 import com.atakanunlu.entities.EmployeeEntity;
+import com.atakanunlu.exceptions.ResourceNotFoundException;
 import com.atakanunlu.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,8 @@ public class EmployeeService {
 
     public EmployeeDTO updateEmployeeById(Long employeeId,EmployeeDTO employeeDTO) {
 
+        isExistEmployeeById(employeeId);
+
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO,EmployeeEntity.class);
         employeeEntity.setId(employeeId);
 
@@ -65,18 +68,18 @@ public class EmployeeService {
 
     }
 
-    public boolean isExistEmployeeById(Long employeeId){
+    public void isExistEmployeeById(Long employeeId){
 
-        return employeeRepository.existsById(employeeId);
+        boolean exist = employeeRepository.existsById(employeeId);
+        if (!exist) throw new ResourceNotFoundException("Employee not found id: " + employeeId);
+
 
     }
 
     public boolean deleteEmployeeById(Long employeeId) {
 
-        boolean exist = isExistEmployeeById(employeeId);
-        if (!exist){
-            return false;
-        }
+        isExistEmployeeById(employeeId);
+
         employeeRepository.deleteById(employeeId);
         return true;
     }
@@ -84,8 +87,7 @@ public class EmployeeService {
 
     public EmployeeDTO updatedPartialEmployeeById(Long employeeId, Map<String, Object> updates) {
 
-        boolean exist = isExistEmployeeById(employeeId);
-        if (!exist) return null;
+        isExistEmployeeById(employeeId);
 
         //İlk olarak veri tabanından veriyi aldım
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();

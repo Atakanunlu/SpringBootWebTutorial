@@ -2,6 +2,7 @@ package com.atakanunlu.controllers;
 
 import com.atakanunlu.dto.EmployeeDTO;
 import com.atakanunlu.entities.EmployeeEntity;
+import com.atakanunlu.exceptions.ResourceNotFoundException;
 import com.atakanunlu.repositories.EmployeeRepository;
 import com.atakanunlu.services.EmployeeService;
 import jakarta.validation.Valid;
@@ -11,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/employees")
@@ -37,7 +35,7 @@ public class EmployeeController {
         Optional<EmployeeDTO> employeeDTO = employeeService.getEmployeeById(id);
         return employeeDTO
                 .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found id: "+id));
 
     }
 
