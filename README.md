@@ -254,12 +254,3 @@ spring.jpa.properties.hibernate.format_sql=true
 ---
 
 
-Bu repository bir **öğrenme defteri** gibidir.
-Kodlar özellikle:
-
-* Okunabilir
-* Açıklayıcı
-* Deneysel
-
-şekilde yazılmıştır.
-
